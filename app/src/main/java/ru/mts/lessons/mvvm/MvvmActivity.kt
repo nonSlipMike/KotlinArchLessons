@@ -10,10 +10,11 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.RecyclerView
 import ru.mts.lessons.R
 import ru.mts.lessons.common.UserAdapter
-import ru.mts.lessons.mvp.UserData
+import ru.mts.lessons.common.UserData
 
 class MvvmActivity : AppCompatActivity() {
 
+    //region value naming zone
     private val myViewModel: MvvmViewModel by viewModels()
 
     private lateinit var userAdapter: UserAdapter
@@ -23,6 +24,7 @@ class MvvmActivity : AppCompatActivity() {
     private lateinit var userList: RecyclerView
     private lateinit var addBtn: Button
     private lateinit var clearBtn: Button
+    //endregion
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

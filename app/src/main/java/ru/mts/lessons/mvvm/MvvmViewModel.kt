@@ -9,8 +9,8 @@ import ru.mts.lessons.App
 import ru.mts.lessons.common.User
 import ru.mts.lessons.common.UserTable
 import ru.mts.lessons.database.DbHandler
-import ru.mts.lessons.mvp.UserData
-import ru.mts.lessons.mvp.UsersModel
+import ru.mts.lessons.common.UserData
+import ru.mts.lessons.common.UsersModel
 
 typealias MyViewState = MvvmActivity.ViewState
 

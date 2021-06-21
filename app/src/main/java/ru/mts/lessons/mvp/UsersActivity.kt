@@ -10,9 +10,13 @@ import androidx.recyclerview.widget.RecyclerView
 import ru.mts.lessons.R
 import ru.mts.lessons.common.User
 import ru.mts.lessons.common.UserAdapter
+import ru.mts.lessons.common.UserData
+import ru.mts.lessons.common.UsersModel
 import ru.mts.lessons.database.DbHandler
 
 class UsersActivity : Activity() {
+
+    //region value naming zone
     private var userAdapter: UserAdapter? = null
     private var editTextName: EditText? = null
     private var editTextEmail: EditText? = null
@@ -22,6 +26,7 @@ class UsersActivity : Activity() {
     private var clearBtn : Button? = null
 
     private var presenter: UsersPresenter? = null
+    //endregion
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,6 +40,7 @@ class UsersActivity : Activity() {
     }
 
     private fun init() {
+
         editTextName = findViewById(R.id.name)
         editTextEmail = findViewById(R.id.email)
         userList = findViewById(R.id.list)

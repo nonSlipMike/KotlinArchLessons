@@ -6,10 +6,9 @@ import android.content.ContentValues
 import android.os.AsyncTask
 import android.os.Bundle
 import android.text.TextUtils
-import android.view.View
+import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import ru.mts.lessons.R
 import ru.mts.lessons.common.User
@@ -20,11 +19,20 @@ import java.util.LinkedList
 import java.util.concurrent.TimeUnit
 
 class SingleActivity : Activity() {
-    var userAdapter: UserAdapter? = null
-    var mDbHandler: DbHandler? = null
+
+
+    //region value naming zone
     private var editTextName: EditText? = null
     private var editTextEmail: EditText? = null
     private var progressDialog: ProgressDialog? = null
+    private var userList: RecyclerView? = null
+    private var addBtn: Button? = null
+    private var clearBtn : Button? = null
+
+    var userAdapter: UserAdapter? = null
+    var mDbHandler: DbHandler? = null
+    //endregion
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_single)
@@ -33,16 +41,19 @@ class SingleActivity : Activity() {
     }
 
     private fun init() {
+        userList = findViewById(R.id.list)
+
         editTextName = findViewById(R.id.name)
-        editTextEmail = findViewById<View>(R.id.email) as EditText
-        findViewById<View>(R.id.add).setOnClickListener { addUser() }
-        findViewById<View>(R.id.clear).setOnClickListener { clearUsers() }
-        val layoutManager = LinearLayoutManager(this)
-        layoutManager.orientation = LinearLayoutManager.VERTICAL
+        editTextEmail = findViewById(R.id.email)
+
+        addBtn = findViewById(R.id.add)
+        clearBtn = findViewById(R.id.clear)
+
+        addBtn?.setOnClickListener { addUser() }
+        clearBtn?.setOnClickListener { clearUsers() }
+
         userAdapter = UserAdapter()
-        val userList = findViewById<View>(R.id.list) as RecyclerView
-        userList.layoutManager = layoutManager
-        userList.adapter = userAdapter
+        userList?.adapter = userAdapter
         mDbHandler = DbHandler(this)
     }
 
@@ -87,7 +98,7 @@ class SingleActivity : Activity() {
 
 }
 
-class LoadUsersTask(val singleActivity: SingleActivity) : AsyncTask<Void?, Void?, List<User>>() {
+class LoadUsersTask(private val singleActivity: SingleActivity) : AsyncTask<Void?, Void?, List<User>>() {
     override fun doInBackground(vararg params: Void?): List<User> {
         val users: MutableList<User> =
             LinkedList()

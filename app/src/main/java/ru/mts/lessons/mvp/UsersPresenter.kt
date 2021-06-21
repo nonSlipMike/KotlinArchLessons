@@ -5,8 +5,9 @@ import android.text.TextUtils
 import ru.mts.lessons.R
 import ru.mts.lessons.common.User
 import ru.mts.lessons.common.UserTable
-import ru.mts.lessons.mvp.UsersModel.CompleteCallback
-import ru.mts.lessons.mvp.UsersModel.LoadUserCallback
+import ru.mts.lessons.common.UsersModel
+import ru.mts.lessons.common.UsersModel.CompleteCallback
+import ru.mts.lessons.common.UsersModel.LoadUserCallback
 
 class UsersPresenter(private val model: UsersModel) {
     private var view: UsersActivity? = null

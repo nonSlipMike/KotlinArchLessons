@@ -1,4 +1,4 @@
-package ru.mts.lessons.mvp
+package ru.mts.lessons.common
 
 data class UserData (
     var name: String? = null,
