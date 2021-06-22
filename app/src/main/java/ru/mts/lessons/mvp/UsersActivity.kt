@@ -14,7 +14,7 @@ import ru.mts.lessons.common.UserData
 import ru.mts.lessons.common.UsersModel
 import ru.mts.lessons.database.DbHandler
 
-class UsersActivity : Activity() {
+class UsersActivity : Activity(),ViewApi {
 
     //region value naming zone
     private var userAdapter: UserAdapter? = null
@@ -23,7 +23,7 @@ class UsersActivity : Activity() {
     private var progressDialog: ProgressDialog? = null
     private var userList: RecyclerView? = null
     private var addBtn: Button? = null
-    private var clearBtn : Button? = null
+    private var clearBtn: Button? = null
 
     private var presenter: UsersPresenter? = null
     //endregion
@@ -44,11 +44,11 @@ class UsersActivity : Activity() {
         editTextName = findViewById(R.id.name)
         editTextEmail = findViewById(R.id.email)
         userList = findViewById(R.id.list)
-        addBtn =  findViewById(R.id.add)
-        clearBtn =  findViewById(R.id.clear)
+        addBtn = findViewById(R.id.add)
+        clearBtn = findViewById(R.id.clear)
 
-        addBtn?.setOnClickListener { presenter!!.add() }
-        clearBtn?.setOnClickListener { presenter!!.clear() }
+        addBtn?.setOnClickListener { presenter?.add() }
+        clearBtn?.setOnClickListener { presenter?.clear() }
         userAdapter = UserAdapter()
         userList?.adapter = userAdapter
 
@@ -57,30 +57,29 @@ class UsersActivity : Activity() {
         presenter?.viewIsReady()
     }
 
-    val userData: UserData
-        get() {
-            val userData = UserData()
-            userData.name = editTextName?.text.toString()
-            userData.email = editTextEmail?.text.toString()
-            return userData
-        }
+    override fun getUsers(): UserData {
+        return UserData(
+            editTextName?.text.toString(),
+            editTextEmail?.text.toString()
+        )
+    }
 
-    fun showUsers(users: List<User?>?) {
-        if (users != null) userAdapter!!.data = users as MutableList<User>
+    override fun showUsers(users: List<User?>?) {
+        if (users != null) userAdapter?.data = users as MutableList<User>
         userAdapter?.notifyDataSetChanged()
     }
 
-    fun showToast(resId: Int) {
+    override fun showToast(resId: Int) {
         Toast.makeText(this, resId, Toast.LENGTH_SHORT).show()
     }
 
-    fun showProgress() {
+    override fun showProgress() {
         progressDialog = ProgressDialog.show(this, "", getString(R.string.please_wait))
     }
 
-    fun hideProgress() {
+    override fun hideProgress() {
         if (progressDialog != null) {
-            progressDialog!!.dismiss()
+            progressDialog?.dismiss()
         }
     }
 
@@ -88,4 +87,12 @@ class UsersActivity : Activity() {
         super.onDestroy()
         presenter?.detachView()
     }
+}
+
+interface ViewApi {
+    fun getUsers(): UserData
+    fun showUsers(users: List<User?>?)
+    fun showToast(resId: Int)
+    fun showProgress()
+    fun hideProgress()
 }

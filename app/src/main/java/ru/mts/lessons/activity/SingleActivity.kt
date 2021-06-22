@@ -64,8 +64,8 @@ class SingleActivity : Activity() {
     }
 
     private fun addUser() {
-        val name = editTextName!!.text.toString()
-        val email = editTextEmail!!.text.toString()
+        val name = editTextName?.text.toString()
+        val email = editTextEmail?.text.toString()
         if (TextUtils.isEmpty(name) || TextUtils.isEmpty(email)) {
             Toast.makeText(this, R.string.empty_values, Toast.LENGTH_SHORT).show()
             return
@@ -92,7 +92,7 @@ class SingleActivity : Activity() {
 
     fun hideProgress() {
         if (progressDialog != null) {
-            progressDialog!!.dismiss()
+            progressDialog?.dismiss()
         }
     }
 
@@ -103,27 +103,27 @@ class LoadUsersTask(private val singleActivity: SingleActivity) : AsyncTask<Void
         val users: MutableList<User> =
             LinkedList()
         val cursor =
-            singleActivity.mDbHandler!!.readableDatabase.query(UserTable.TABLE, null, null, null, null, null, null)
-        while (cursor.moveToNext()) {
+            singleActivity.mDbHandler?.readableDatabase?.query(UserTable.TABLE, null, null, null, null, null, null)
+        while (cursor?.moveToNext() == true) {
             val user = User()
             user.id = cursor.getLong(cursor.getColumnIndex(UserTable.COLUMN.ID))
             user.name = cursor.getString(cursor.getColumnIndex(UserTable.COLUMN.NAME))
             user.email = cursor.getString(cursor.getColumnIndex(UserTable.COLUMN.EMAIL))
             users.add(user)
         }
-        cursor.close()
+        cursor?.close()
         return users
     }
 
     override fun onPostExecute(users: List<User>) {
-        singleActivity.userAdapter!!.initData(users)
+        singleActivity.userAdapter?.initData(users)
     }
 }
 
 class AddUserTask(private val singleActivity: SingleActivity) : AsyncTask<ContentValues?, Void?, Void?>() {
     override fun doInBackground(vararg params: ContentValues?): Void? {
         val cvUser = params[0]
-        singleActivity.mDbHandler!!.writableDatabase.insert(UserTable.TABLE, null, cvUser)
+        singleActivity.mDbHandler?.writableDatabase?.insert(UserTable.TABLE, null, cvUser)
         try {
             TimeUnit.SECONDS.sleep(1)
         } catch (e: InterruptedException) {
@@ -141,7 +141,7 @@ class AddUserTask(private val singleActivity: SingleActivity) : AsyncTask<Conten
 
 class ClearUsersTask(val singleActivity: SingleActivity) : AsyncTask<Void?, Void?, Void?>() {
      override fun doInBackground(vararg params: Void?): Void? {
-         singleActivity.mDbHandler!!.writableDatabase.delete(UserTable.TABLE, null, null)
+         singleActivity.mDbHandler?.writableDatabase?.delete(UserTable.TABLE, null, null)
         try {
             TimeUnit.SECONDS.sleep(1)
         } catch (e: InterruptedException) {

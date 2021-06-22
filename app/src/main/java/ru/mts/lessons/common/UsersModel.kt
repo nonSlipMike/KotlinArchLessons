@@ -6,18 +6,18 @@ import ru.mts.lessons.database.DbHandler
 import java.util.LinkedList
 import java.util.concurrent.TimeUnit
 
-class UsersModel(private val dbHandler: DbHandler) {
-    fun loadUsers(callback: LoadUserCallback?) {
+class UsersModel(private val dbHandler: DbHandler) : UsersModelApi {
+    override fun loadUsers(callback: LoadUserCallback?) {
         val loadUsersTask = LoadUsersTask(dbHandler, callback)
         loadUsersTask.execute()
     }
 
-    fun addUser(contentValues: ContentValues?, callback: CompleteCallback?) {
+    override fun addUser(contentValues: ContentValues?, callback: CompleteCallback?) {
         val addUserTask = AddUserTask(dbHandler, callback)
         addUserTask.execute(contentValues)
     }
 
-    fun clearUsers(completeCallback: CompleteCallback?) {
+    override fun clearUsers(completeCallback: CompleteCallback?) {
         val clearUsersTask = ClearUsersTask(dbHandler, completeCallback)
         clearUsersTask.execute()
     }
@@ -31,11 +31,15 @@ class UsersModel(private val dbHandler: DbHandler) {
     }
 }
 
-class LoadUsersTask(private val dbHandler: DbHandler, private val callback: UsersModel.LoadUserCallback?) :
+class LoadUsersTask(
+    private val dbHandler: DbHandler,
+    private val callback: UsersModel.LoadUserCallback?
+) :
     AsyncTask<Void?, Void?, List<User>>() {
     override fun doInBackground(vararg params: Void?): List<User> {
         val users: MutableList<User> = LinkedList()
-        val cursor = dbHandler.readableDatabase.query(UserTable.TABLE, null, null, null, null, null, null)
+        val cursor =
+            dbHandler.readableDatabase.query(UserTable.TABLE, null, null, null, null, null, null)
         while (cursor.moveToNext()) {
             val user = User()
             user.id = cursor.getLong(cursor.getColumnIndex(UserTable.COLUMN.ID))
@@ -52,7 +56,10 @@ class LoadUsersTask(private val dbHandler: DbHandler, private val callback: User
     }
 }
 
-class AddUserTask(private val dbHandler: DbHandler, private val callback: UsersModel.CompleteCallback?) :
+class AddUserTask(
+    private val dbHandler: DbHandler,
+    private val callback: UsersModel.CompleteCallback?
+) :
     AsyncTask<ContentValues?, Void?, Void?>() {
     override fun doInBackground(vararg params: ContentValues?): Void? {
         val cvUser = params[0]
@@ -71,7 +78,10 @@ class AddUserTask(private val dbHandler: DbHandler, private val callback: UsersM
     }
 }
 
-class ClearUsersTask(private val dbHandler: DbHandler, private val callback: UsersModel.CompleteCallback?) :
+class ClearUsersTask(
+    private val dbHandler: DbHandler,
+    private val callback: UsersModel.CompleteCallback?
+) :
     AsyncTask<Void?, Void?, Void?>() {
     override fun doInBackground(vararg params: Void?): Void? {
         dbHandler.writableDatabase.delete(UserTable.TABLE, null, null)
@@ -87,4 +97,10 @@ class ClearUsersTask(private val dbHandler: DbHandler, private val callback: Use
         super.onPostExecute(aVoid)
         callback?.onComplete()
     }
+}
+
+interface UsersModelApi {
+    fun loadUsers(callback: UsersModel.LoadUserCallback?)
+    fun addUser(contentValues: ContentValues?, callback: UsersModel.CompleteCallback?)
+    fun clearUsers(completeCallback: UsersModel.CompleteCallback?)
 }

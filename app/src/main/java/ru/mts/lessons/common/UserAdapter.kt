@@ -27,10 +27,12 @@ class UserAdapter : RecyclerView.Adapter<UserHolder>() {
     }
 
     fun initData(users: List<User>?) {
-        data.clear()
-        data.addAll(users!!)
-        notifyDataSetChanged()
-        Log.d("initDataBlock", "size  = $itemCount")
+        if (users!=null){
+            data.clear()
+            data.addAll(users)
+            notifyDataSetChanged()
+            Log.d("initDataBlock", "size  = $itemCount")
+        }
     }
 
     class UserHolder(itemView: View) : ViewHolder(itemView) {
