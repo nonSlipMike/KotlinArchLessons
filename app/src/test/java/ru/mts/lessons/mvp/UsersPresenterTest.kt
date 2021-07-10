@@ -1,8 +1,12 @@
 package ru.mts.lessons.mvp
 
-import io.mockk.*
+import io.mockk.every
+import io.mockk.mockk
+import io.mockk.verify
 import org.junit.Test
-import ru.mts.lessons.common.*
+import ru.mts.lessons.common.User
+import ru.mts.lessons.common.UserData
+import ru.mts.lessons.common.UsersModelApi
 
 class UsersPresenterTest {
 
